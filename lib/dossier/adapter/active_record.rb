@@ -15,8 +15,7 @@ module Dossier
 
       def execute(query, report_name = nil)
         result = Result.new(connection.exec_query(*[query, report_name].compact))
-        # the JDBC AR adapters don't return ActiveRecord::Result, so create it if it gets an Array
-        if result.is_a?(Array)
+        if RUBY_PLATFORM == "java"
           result = ActiveRecord::Result.new(result.result[0].keys, result)
         end
         result
